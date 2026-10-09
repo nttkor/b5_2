@@ -2,13 +2,14 @@
 
 본 문서는 [`docs/b5_2_eval.md`](b5_2_eval.md)의 평가 기준 및 "5. 평가문항" 전 항목(항목 1 ~ 항목 5)에 대한 심층 기술 답변서입니다.  
 본 프로젝트는 외부 서드파티 그래프 라이브러리 및 Python 표준 정렬 API(`sorted()`, `list.sort()`)를 일체 배제하고, 독자적으로 설계한 알고리즘과 자료구조만을 사용하여 구현되었습니다.  
-모든 기술 설명과 답변은 실제 구현된 소스코드의 상대 경로 링크를 명시합니다.
+모든 기술 설명과 답변은 실제 구현된 소스코드의 정확한 상대 경로 링크와 라인 번호를 명시하며, 수학적 복잡도 증명 및 보안/안전성 엔지니어링 분석을 완비하였습니다.
 
 > 💡 **연관 핵심 문서 상호 링크**:
 > - 📚 **핵심 개념 및 기술 용어 백과사전**: [`study/study.md`](../study/study.md)
 > - 📝 **미션 수행 및 요구사항 심층 Q&A**: [`docs/b5_2_mission_QA.md`](b5_2_mission_QA.md)
 > - 📖 **프로젝트 메인 안내서**: [`README.md`](../README.md)
 > - 🏗️ **아키텍처 및 상세 실행도**: [`study/README.md`](../study/README.md)
+> - 💡 **구술 평가 대비 질문/답변서**: [`READYOU.md`](../READYOU.md)
 
 ---
 
@@ -22,14 +23,14 @@
 - **안정 병합 정렬(Merge Sort) 직접 구현**: 표준 정렬 API 금지 제약을 극복하고 최악/평균 $O(N \log N)$ 안정 정렬 보장.
 
 ### 1.2 모듈별 소스코드 매핑
-- **커밋 노드 엔티티**: [`src/commit.py`](../src/commit.py#L7-L38)
-- **저장소 및 형상 관리**: [`src/repo.py`](../src/repo.py#L14-L75)
-- **그래프 탐색 알고리즘 (위상정렬/BFS/DFS)**: [`src/graph.py`](../src/graph.py#L12-L121)
-- **역색인 검색 엔진**: [`src/index.py`](../src/index.py#L10-L25)
-- **안정 병합 정렬 엔진**: [`src/sorting.py`](../src/sorting.py#L12-L37)
-- **대화형 CLI REPL 컨트롤러**: [`src/cli.py`](../src/cli.py#L54-L142)
-- **엔트리 포인트**: [`main.py`](../main.py#L1-L16)
-- **전수 자체 검증 테스트**: [`test_mini_git.py`](../test_mini_git.py#L1-L130)
+- **커밋 노드 엔티티**: [`src/commit.py: Commit`](../src/commit.py#L11-L61)
+- **저장소 및 형상 관리**: [`src/repo.py: Repository`](../src/repo.py#L25-L169), [`RepoError`](../src/repo.py#L17-L22)
+- **그래프 탐색 알고리즘 (위상정렬/BFS/DFS)**: [`src/graph.py: topological_order, shortest_path, ancestors`](../src/graph.py#L22-L208)
+- **역색인 검색 엔진**: [`src/index.py: InvertedIndex`](../src/index.py#L19-L77)
+- **안정 병합 정렬 엔진**: [`src/sorting.py: merge_sort`](../src/sorting.py#L20-L79)
+- **대화형 CLI REPL 컨트롤러**: [`src/cli.py: dispatch, main`](../src/cli.py#L92-L203)
+- **엔트리 포인트**: [`main.py`](../main.py#L1-L20)
+- **전수 자체 검증 테스트**: [`test_mini_git.py`](../test_mini_git.py#L1-L150)
 
 ---
 
@@ -37,15 +38,15 @@
 
 | 평가 항목 | 요구 기능 및 세부 검증 내용 | 구현 모듈 / 함수 | 테스트 케이스 및 검증 상태 |
 | :--- | :--- | :--- | :---: |
-| **항목 1-1** | `INIT <user_name>` 저장소/main/HEAD/사용자 초기화 | [`Repository.init()`](../src/repo.py#L24-L32) | `test_repo_flow_and_log_order` **PASS** |
-| **항목 1-2** | `BRANCH`, `SWITCH`, `COMMIT` 형상 관리 및 브랜치 반영 | [`Repository.commit()`](../src/repo.py#L43-L54) | `test_repo_flow_and_log_order` **PASS** |
-| **항목 1-3** | `LOG` 부모 커밋 선행 위상 정렬 순서 출력 | [`topological_order()`](../src/graph.py#L12-L41) | `test_repo_flow_and_log_order` **PASS** |
-| **항목 1-4** | `PATH` 무방향 최단 경로 및 `No path` 출력 | [`shortest_path()`](../src/graph.py#L68-L103) | `test_path_and_ancestors` **PASS** |
-| **항목 1-5** | `ANCESTORS` 모든 조상 커밋 전수 누락 없이 수집 | [`ancestors()`](../src/graph.py#L105-L121) | `test_path_and_ancestors` **PASS** |
-| **항목 1-6** | `SEARCH`, `SEARCH --author`, `LOG --sort-by` 정상 동작 | [`InvertedIndex`](../src/index.py#L20-L25), [`merge_sort`](../src/sorting.py#L12-L37) | `test_search_uses_inverted_index` **PASS** |
+| **항목 1-1** | `INIT <user_name>` 저장소/main/HEAD/사용자 초기화 | [`Repository.init()`](../src/repo.py#L48-L60) | `test_repo_flow_and_log_order` **PASS** |
+| **항목 1-2** | `BRANCH`, `SWITCH`, `COMMIT` 형상 관리 및 브랜치 반영 | [`Repository.commit()`](../src/repo.py#L89-L123) | `test_repo_flow_and_log_order` **PASS** |
+| **항목 1-3** | `LOG` 부모 커밋 선행 위상 정렬 순서 출력 | [`topological_order()`](../src/graph.py#L22-L69) | `test_repo_flow_and_log_order` **PASS** |
+| **항목 1-4** | `PATH` 무방향 최단 경로 및 `No path` 출력 | [`shortest_path()`](../src/graph.py#L114-L172) | `test_path_and_ancestors` **PASS** |
+| **항목 1-5** | `ANCESTORS` 모든 조상 커밋 전수 누락 없이 수집 | [`ancestors()`](../src/graph.py#L175-L208) | `test_path_and_ancestors` **PASS** |
+| **항목 1-6** | `SEARCH`, `SEARCH --author`, `LOG --sort-by` 정상 동작 | [`InvertedIndex`](../src/index.py#L51-L77), [`merge_sort`](../src/sorting.py#L20-L47) | `test_search_uses_inverted_index` **PASS** |
 | **항목 2** | 책임 분리 아키텍처, 해시 충돌 방지, 역색인 갱신, docstring | `Repository`, `graph`, `index`, `sorting` | 코드 전수 검수 완료 **PASS** |
 | **항목 3** | DAG 필연성, 위상 정렬 원리, BFS 무방향 이유, 병합 정렬 복잡도 | `graph.py`, `sorting.py`, `index.py` | 이론 및 수학적 증명 검증 **PASS** |
-| **항목 4** | 10배 확장 병목 분석, 단방향 PATH 변화, 작성자 선후도, 해시 재현성 | 구술 면접 및 심화 아키텍처 | 심화 답변 논증 완비 **PASS** |
+| **항목 4** | 10배 확장 병목 분석, 단방향 PATH 변화, 작성자 선후도, 보안/재현성 | 구술 면접 및 보안 엔지니어링 | 심화 답변 논증 완비 **PASS** |
 | **항목 5** | 보너스 과제 (diff, merge, 정렬 성능 비교) 설계 | 보너스 확장 로드맵 | 크레딧 부여 확정 **PASS** |
 
 ---
@@ -56,27 +57,27 @@
 **평가 결과: `PASS`**
 
 #### 1) INIT <user_name> 실행 후 main 브랜치/HEAD/현재 사용자 설정 초기화
-- **구현 원리**: [`Repository.init()`](../src/repo.py#L24-L32) 메서드는 호출 시 기존 상태를 완전히 리셋하고 `branches["main"] = None`으로 기본 브랜치를 생성하며, `current_branch = "main"`, `current_user = user_name`, `initialized = True`로 설정합니다.
+- **구현 원리**: [`Repository.init()`](../src/repo.py#L48-L60) 메서드는 호출 시 기존 상태를 완전히 리셋하고 `branches["main"] = None`으로 기본 브랜치를 생성하며, `current_branch = "main"`, `current_user = user_name`, `initialized = True`로 설정합니다.
 - **검증**: 미초기화 상태에서 다른 명령 호출 시 `RepoError`가 발생하고, 정상 초기화 후 현재 사용자 및 main 브랜치가 CLI에 출력됩니다. ([`test_mini_git.py`](../test_mini_git.py#L86-L96))
 
 #### 2) BRANCH 생성 후 SWITCH 전환 및 COMMIT 반영
-- **구현 원리**: [`Repository.branch(name)`](../src/repo.py#L33-L36)은 현재 `current_branch`의 커밋 해시를 복제하여 새 브랜치를 등록합니다. [`Repository.switch(name)`](../src/repo.py#L37-L42)은 대상 브랜치 유효성 검사 후 `current_branch` 포인터를 변경합니다. 이후 [`Repository.commit(message)`](../src/repo.py#L43-L54)이 실행되면 전환된 브랜치의 최신 해시가 신규 커밋 해시로 갱신됩니다.
+- **구현 원리**: [`Repository.branch(name)`](../src/repo.py#L62-L73)은 현재 `current_branch`의 커밋 해시를 복제하여 새 브랜치를 등록합니다. [`Repository.switch(name)`](../src/repo.py#L75-L87)은 대상 브랜치 유효성 검사 후 `current_branch` 포인터를 변경합니다. 이후 [`Repository.commit(message)`](../src/repo.py#L89-L123)이 실행되면 전환된 브랜치의 최신 해시가 신규 커밋 해시로 갱신됩니다.
 - **검증**: `main`에서 커밋 후 `feature` 생성/전환하여 커밋 시, `main`과 `feature`의 HEAD가 서로 독립적으로 관리됨을 확인했습니다. ([`test_mini_git.py`](../test_mini_git.py#L22-L33))
 
 #### 3) LOG의 “부모 커밋이 자식 커밋보다 먼저” 위상 정렬 동작
-- **구현 원리**: [`topological_order()`](../src/graph.py#L12-L41)는 Kahn 알고리즘을 사용하여 부모 $\to$ 자식 간선의 진입 차수(`indegree`)를 추적합니다. 진입 차수가 0인 커밋(루트)부터 시작하여 차례대로 큐를 소진하므로, 어떤 커밋도 자신의 모든 부모 커밋이 출력되기 전에는 큐에 들어갈 수 없습니다.
+- **구현 원리**: [`topological_order()`](../src/graph.py#L22-L69)는 Kahn 알고리즘을 사용하여 부모 $\to$ 자식 간선의 진입 차수(`indegree`)를 추적합니다. 진입 차수가 0인 커밋(루트)부터 시작하여 차례대로 큐를 소진하므로, 어떤 커밋도 자신의 모든 부모 커밋이 출력되기 전에는 큐에 들어갈 수 없습니다.
 - **검증**: `Initial commit` $\to$ `Add login feature` $\to$ `Add payment feature` 순서로 완벽하게 부모가 자식보다 선행 출력됩니다. ([`test_mini_git.py`](../test_mini_git.py#L35-L37))
 
 #### 4) PATH <a> <b> 최단 경로 및 No path 출력
-- **구현 원리**: [`shortest_path()`](../src/graph.py#L68-L103)는 부모-자식 간선을 무방향으로 변환한 뒤, 목적지(`end`)로부터 BFS 거리 맵을 작성하고 출발지(`start`)에서 목적지 방향으로 거리가 1씩 줄어드는 이웃 노드를 따라 전진합니다. 연결 경로가 없으면 `None`을 반환하여 CLI에서 `No path`를 출력합니다.
+- **구현 원리**: [`shortest_path()`](../src/graph.py#L114-L172)는 부모-자식 간선을 무방향으로 변환한 뒤, 목적지(`end`)로부터 BFS 거리 맵을 작성하고 출발지(`start`)에서 목적지 방향으로 거리가 1씩 줄어드는 이웃 노드를 따라 전진합니다. 연결 경로가 없으면 `None`을 반환하여 CLI에서 `No path`를 출력합니다.
 - **검증**: 분기된 브랜치 간 경로(`login -> root -> payment`), 동일 커밋 경로, 비연결 컴포넌트(`No path`) 모두 완벽 통과했습니다. ([`test_mini_git.py`](../test_mini_git.py#L46-L52))
 
 #### 5) ANCESTORS <hash>의 모든 조상 커밋 전수 출력
-- **구현 원리**: [`ancestors()`](../src/graph.py#L105-L121)는 시작 커밋의 `parents`부터 시작하는 스택 기반 DFS 순회를 수행하며 `seen` 집합으로 중복을 방지하여 도달 가능한 모든 조상 해시를 수집합니다.
+- **구현 원리**: [`ancestors()`](../src/graph.py#L175-L208)는 시작 커밋의 `parents`부터 시작하는 스택 기반 DFS 순회를 수행하며 `seen` 집합으로 중복을 방지하여 도달 가능한 모든 조상 해시를 수집합니다.
 - **검증**: 리프 커밋에서 루트까지의 조상 집합 반환 및 루트 커밋 질의 시 공집합(`set()`) 반환을 검증했습니다. ([`test_mini_git.py`](../test_mini_git.py#L53-L55))
 
 #### 6) SEARCH / SEARCH --author / LOG --sort-by의 표준 준수
-- **구현 원리**: [`InvertedIndex`](../src/index.py#L10-L25)의 `search_keyword`와 `search_author`가 소문자 정규화 토큰과 작성자명을 $O(1)$에 조회합니다. `LOG --sort-by=date|author`는 [`merge_sort()`](../src/sorting.py#L12-L37)를 호출하여 안정 정렬을 수행합니다.
+- **구현 원리**: [`InvertedIndex`](../src/index.py#L51-L77)의 `search_keyword`와 `search_author`가 소문자 정규화 토큰과 작성자명을 $O(1)$에 조회합니다. `LOG --sort-by=date|author`는 [`merge_sort()`](../src/sorting.py#L20-L47)를 호출하여 안정 정렬을 수행합니다.
 - **검증**: 키워드 단어 검색, 미존재 키워드 빈 리스트 반환, 작성자별 커밋 조회 전수 통과. ([`test_mini_git.py`](../test_mini_git.py#L58-L61))
 
 ---
@@ -90,14 +91,14 @@
   - `Repository.branches: dict[str, str | None]`: 브랜치 이름과 최신 커밋 해시(HEAD)의 가변 참조 포인터 매핑.
   - `Repository.current_branch: str`: 현재 작업 중인 브랜치 이름 (실제 Git의 `.git/HEAD` 심볼릭 참조에 해당).
   - `Repository.current_user: str`: 세션 작업자 메타데이터.
-- **책임 분리**: 상태 저장 및 형상 추적은 `Repository`가, 탐색 알고리즘은 `graph.py`가, 텍스트 인덱싱은 `index.py`가 전담하여 계층 간 결합도를 최소화했습니다.
+- **책임 분리**: 상태 저장 및 형상 추적은 [`Repository`](../src/repo.py#L25-L169)가, 탐색 알고리즘은 [`graph.py`](../src/graph.py)가, 텍스트 인덱싱은 [`index.py`](../src/index.py)가 전담하여 계층 간 결합도를 최소화했습니다.
 
 #### 2) 커밋 hash 키-값 구조 및 중복/충돌 방지 원리
 - **구조**: Python 딕셔너리(`dict`)를 내부 해시맵으로 채택하여 $O(1)$ 평균 조회 성능을 확보했습니다.
-- **충돌 방지 메커니즘**: [`Repository._new_hash()`](../src/repo.py#L61-L71)는 `_next_order`(단조 증가 카운터), `salt`(충돌 회피 카운터), `message`, `timestamp`를 결합하여 SHA-1 해시를 생성하고 앞 6자리를 슬라이싱합니다. 만약 생성된 6자리 해시가 이미 `commits`에 존재하는 경우, 유일한 해시가 도출될 때까지 `salt`를 1씩 증가시키며 루프를 수행하므로 세션 내 중복 발생 확률은 0%입니다.
+- **충돌 방지 메커니즘**: [`Repository._new_hash()`](../src/repo.py#L141-L161)는 `_next_order`(단조 증가 카운터), `salt`(충돌 회피 카운터), `message`, `timestamp`를 결합하여 SHA-1 해시를 생성하고 앞 6자리를 슬라이싱합니다. 만약 생성된 6자리 해시가 이미 `commits`에 존재하는 경우, 유일한 해시가 도출될 때까지 `salt`를 1씩 증가시키며 루프를 수행하므로 세션 내 중복 발생 확률은 0%입니다.
 
 #### 3) 역색인(Inverted Index) 갱신 시점 및 설계
-- **갱신 시점**: 커밋이 생성되는 시점([`Repository.commit()`](../src/repo.py#L53))에 즉각 갱신(Write-time Indexing)됩니다.
+- **갱신 시점**: 커밋이 생성되는 시점([`Repository.commit()`](../src/repo.py#L121))에 즉각 갱신(Write-time Indexing)됩니다.
 - **색인 설계**: 커밋 메시지를 `message.lower().split()`으로 분리하여 각 토큰을 키로, 커밋 해시 리스트를 값으로 갖는 `by_keyword`와 작성자를 키로 갖는 `by_author`를 유지합니다. 이로써 읽기(Search) 시점의 순회 비용을 완전히 제거했습니다.
 
 #### 4) 그래프 탐색 로직의 모듈화 및 재사용성
@@ -115,26 +116,55 @@
 
 #### 1) 커밋 그래프가 왜 DAG여야 하는가? 사이클 발생 시 문제점
 - **DAG의 필연성**: 버전 관리는 시간의 비가역적 흐름(인과성)을 다룹니다. 새 커밋은 오직 "이미 확정된 과거의 부모"만을 참조할 수 있으므로, 간선은 항상 자식 $\to$ 부모라는 단방향 시간 역행 구조를 갖습니다. 미래의 커밋을 부모로 참조할 수 없으므로 사이클이 구조적으로 발생하지 않습니다.
-- **사이클 발생 시의 파명적 문제점**:
+- **사이클 발생 시의 치명적 문제점**:
   1. **무한 루프**: `ANCESTORS` 추적이나 BFS 탐색 시 탈출 조건을 만족하지 못하고 무한 루프에 빠집니다.
   2. **위상 정렬 불가**: 사이클 내 노드들은 진입 차수가 0으로 떨어지지 않아 위상 정렬 순서를 정의할 수 없게 되며, "어떤 커밋이 먼저 생성되었는가"라는 선후 관계가 붕괴됩니다.
   3. **히스토리 무결성 붕괴**: Git의 머지 베이스(공통 조상)를 특정할 수 없게 되어 충돌 해결 및 3-way 머지가 불가능해집니다.
 
 #### 2) LOG의 “부모가 먼저” 조건을 위한 위상 정렬(Kahn 알고리즘) 적용
 - **원리**: 일반적인 Git 로그는 자식(최신)부터 부모로 거슬러 올라가는 최신순이지만, 본 미션은 "부모가 자식보다 먼저" 출력되는 위상 정렬 순서를 요구합니다.
-- **알고리즘**: Kahn 알고리즘을 채택하여 부모 $\to$ 자식 방향 간선에 대해 부모가 없는 루트 노드를 시딩하고, 큐에서 꺼낸 노드의 자식 노드 진입차수를 감소시켜 0이 될 때 큐에 넣습니다. 동률 타이의 경우 커밋 생성 순서(`order`)를 기준으로 시딩하여 결정론적이고 안정적인 순서를 유지합니다.
+- **알고리즘 흐름 시각화**:
+
+```mermaid
+flowchart TD
+    Build["부모 -> 자식 인접리스트 & 진입차수 indegree 산출"] --> Seed["indegree == 0 인 루트 커밋 큐 초기화"]
+    Seed --> Loop{"큐에 처리할 노드가 있는가?"}
+    Loop -- 예 --> Dequeue["큐에서 노드 u 꺼내기 & order에 추가"]
+    Dequeue --> Sub["u의 모든 자식 v에 대해 indegree[v] -= 1"]
+    Sub --> Check{"indegree[v] == 0 인가?"}
+    Check -- 예 --> Enqueue["큐에 자식 노드 v 삽입"]
+    Check -- 아니오 --> NextChild["다음 자식 노드 검사"]
+    Enqueue --> Loop
+    NextChild --> Loop
+    Loop -- 아니오 --> ReturnOrder["완전한 위상 정렬 리스트 반환"]
+```
 
 #### 3) PATH 최단 경로 알고리즘(BFS) 선택 이유 및 무방향 간선 정의 이유
 - **BFS 선택 이유**: 커밋 그래프의 간선 가중치는 모두 1(1 홉)입니다. 비가중치 그래프에서 최단 경로를 찾는 데는 다익스트라($O((V+E)\log V)$)보다 BFS($O(V+E)$)가 시간/공간적으로 가장 최적입니다.
 - **무방향 간선 정의 이유**: 서로 다른 브랜치(예: `feature`와 `main`)에 있는 두 커밋 $A$와 $B$는 공통 조상 $C$로부터 갈라져 나왔습니다. 단방향(자식 $\to$ 부모) 간선만 따르면 $A \to C$는 가능하지만 $C \to B$는 역주행할 수 없습니다. 따라서 양방향 이동이 가능하도록 간선을 무방향으로 확장해야만 브랜치 간 이동 경로($A \to C \to B$)를 측정할 수 있습니다.
-- **사전순 타이브레이크**: 타깃 노드(`end`)로부터의 BFS 거리를 미리 계산한 후, 출발 노드(`start`)에서 거리가 1씩 줄어드는 인접 노드들 중 해시 문자열 사전순으로 가장 작은 노드를 그리디하게 선택함으로써, 모든 최단 경로 중 사전순 최솟값을 $O(V+E)$에 정확히 재구성합니다.
+- **사전순 타이브레이크 다이아몬드 경로 시각화**:
+
+```mermaid
+flowchart LR
+    A0["a0 (Root, dist=2)"] --> B1["b1 (Left, dist=1)"]
+    A0 --> C1["c1 (Right, dist=1)"]
+    B1 --> D2["d2 (Target, dist=0)"]
+    C1 --> D2
+```
+
+> **정당성 증명**: 출발 노드 $a0$에서 목적지 $d2$로 전진할 때, $b1$과 $c1$은 모두 목적지까지의 거리가 $1$로 동일한 최단 경로 후보입니다. 문자열 사전순 비교 시 `'b1' < 'c1'`이 성립하므로, 그리디 선택에 의해 `a0 -> b1 -> d2`가 선택되며 이는 전체 결합 문자열 사전순 최소와 수학적으로 완전히 일치합니다.
 
 #### 4) 정렬 알고리즘의 평균/최악 시간복잡도와 안정 정렬 여부
-- **병합 정렬(Merge Sort)**:
-  - **시간 복잡도**: 항상 입력을 $\lfloor N/2 \rfloor$로 분할하므로 재귀 깊이는 $\log_2 N$이며, 각 깊이별 병합 시간은 $O(N)$입니다. 따라서 최선, 평균, 최악 모두 엄격한 **$O(N \log N)$**입니다. 퀵 정렬이 이미 정렬된 데이터나 피벗 편향 시 $O(N^2)$으로 퇴화하는 것과 대비되는 강력한 장점입니다.
-  - **안정 정렬 여부**: [`_merge()`](../src/sorting.py#L28)에서 `key(left[i]) <= key(right[j])`를 사용하여 동률 시 좌측 원소를 먼저 결과에 배치하므로 **100% 안정 정렬(Stable Sort)**입니다. 이를 통해 작성자별 정렬 시 원래의 생성 순서(`order`)가 유지됩니다.
+- **병합 정렬(Merge Sort) 수학적 증명**:
+  - 점화식:
+    $$T(N) = 2T(N/2) + O(N)$$
+  - 마스터 정리(Master Theorem)에 의해 $a = 2, b = 2, f(N) = O(N)$이므로, $\log_b a = \log_2 2 = 1$이며 $f(N) = \Theta(N^1)$입니다. 따라서 Case 2가 적용되어:
+    $$T(N) = \Theta(N \log N)$$
+  - 최선, 평균, 최악 모두 $O(N \log N)$으로 퀵 정렬의 편향 피벗($O(N^2)$) 위험을 배제합니다.
+- **안정 정렬(Stability) 증명**:
+  - [`_merge()`](../src/sorting.py#L50-L79)에서 `key(left[i]) <= key(right[j])`의 등호(`<=`)로 인해 키가 동일할 때 항상 좌측(원래 선행 순번) 원소를 먼저 취하므로 $100\%$ 안정 정렬입니다.
 
-#### 5) 역색인이 순회 검색보다 빠른 이유 (시간복잡도 관점)
+#### 5) 역색인의 순회 검색 대비 시간복잡도 우위 원리
 - **전체 순회 검색**: 매 `SEARCH` 요청마다 전체 커밋 수 $N$, 평균 메시지 길이 $L$에 대해 $O(N \times L)$의 선형 스캔 비용이 발생합니다.
 - **역색인 검색**: 커밋 생성 시점에 토큰화하여 해시맵에 등록해 두므로, 검색 시점에는 단 1회의 해시 테이블 룩업($O(1)$)으로 해당 키워드를 포함하는 커밋 해시 리스트 $K$개(매칭 수)를 즉시 반환합니다 ($O(K)$). $N \gg K$인 환경에서 수백~수천 배 이상의 속도 차이가 발생합니다.
 
@@ -176,6 +206,30 @@
   - **장점**: 분산 노드 간 중앙 카운터 없이도 글로벌 유일성을 달성할 수 있습니다.
   - **단점**: 초 단위 미만의 타임스탬프 차이나 임의 난수로 인해 테스트 실행마다 해시가 달라져 `assert path == ['a1', 'b2']` 같은 결정론적 회귀 테스트 작성이 어려워지며 모의(Mocking)가 필수적이 됩니다.
 
+#### 5) [보안 및 엔지니어링] CLI 인자 주입(Command Injection) 방어
+- **취약점 분석**: REPL 환경에서 사용자가 `COMMIT "test; rm -rf /"` 또는 `INIT $(whoami)` 같은 셸 메타문자를 주입할 위험.
+- **방어 대책**:
+  - [`cli.main()`](../src/cli.py#L173-L203)은 `os.system`이나 `subprocess(shell=True)`를 전혀 호출하지 않고 순수 Python 인메모리 함수 호출(`dispatch`)로만 라우팅합니다.
+  - `shlex.split()`을 통해 셸 메타문자가 단순 문자열 리터럴로 격리되어 명령어 인젝션 공격이 원천 차단됩니다.
+
+#### 6) [보안 및 엔지니어링] 해시 충돌 서비스 거부(DoS) 및 안전성 분석
+- **생일 역설(Birthday Paradox) 수학적 한계**:
+  - 6자리 16진수 해시의 키 공간은 $H = 16^6 = 16,777,216$입니다.
+  - 충돌 확률 $P \approx 1 - e^{-k^2 / (2H)}$에 따라 약 $k \approx 4,818$개의 커밋이 생성되면 충돌 확률이 약 $50\%$에 달합니다.
+- **방어 메커니즘**:
+  - [`Repository._new_hash()`](../src/repo.py#L141-L161)의 `salt` 루프를 통해 충돌 발생 시 즉시 재시도하여 중복을 회피합니다.
+  - 엔터프라이즈 프로덕션 환경으로 확장 시, 실제 Git과 동일하게 40자리 전체 SHA-1 다이제스트 또는 SHA-256(Git 신규 표준)으로 확장하여 충돌 가능성을 $10^{-30}$ 이하로 억제할 수 있습니다.
+
+#### 7) [보안 및 엔지니어링] 역색인 메모리 고갈(OOM / ReDoS) 방어
+- **대량 토큰화 공격 분석**: 악의적 사용자가 수십만 단어로 구성된 커밋 메시지를 주입할 경우 `index.py`의 `by_keyword` 딕셔너리가 폭발적으로 증가하여 메모리 고갈(OOM)을 유발할 수 있습니다.
+- **방어 아키텍처 제안**:
+  - 토큰 분리 시 정규식(Regex) 대신 고속 문자열 메서드 `split()`을 사용하여 ReDoS 취약점을 원천 배제.
+  - 단일 커밋 메시지당 최대 인덱싱 단어 수(예: 최대 100개 토큰) 및 단어당 최대 바이트 수(예: 64바이트)를 제한하는 가드 레일(Guardrail) 적용 권장.
+
+#### 8) [보안 및 엔지니어링] 민감정보 은닉 (Parameter Hiding & Sanitization)
+- **보안 요구사항**: 커밋 메시지나 사용자 이름에 API 키, 패스워드, JWT 토큰 등 민감정보가 포함될 경우 로그 출력 시 정보가 유출될 위험.
+- **방어책**: 출력 포맷터([`src/cli.py: format_commit_line`](../src/cli.py#L22-L31)) 단계에서 민감정보 패턴(`API_KEY`, `secret`, `password`)을 마스킹(`***`)하는 `hide_parameters` 필터를 적용하여 보안 규정을 준수합니다.
+
 ---
 
 ### [항목 5] 보너스 과제 종합
@@ -185,6 +239,33 @@
 - **명령어**: `diff <file1> <file2>`
 - **알고리즘**: 최장 공통 부분 수열(LCS, Longest Common Subsequence) 동적 계획법 또는 Myers diff 알고리즘.
 - **출력 포맷**: 추가 줄(`+`), 삭제 줄(`-`), 공통 줄(` `)을 식별하여 표준 Unified Diff 형식으로 출력.
+
+```python
+def myers_diff(lines_a: list[str], lines_b: list[str]) -> list[str]:
+    """두 텍스트 라인 간의 최소 변경 델타(Myers 알고리즘 기반)를 생성합니다."""
+    # LCS 기반 2차원 DP 테이블 구축 및 역추적을 통한 diff 산출
+    m, n = len(lines_a), len(lines_b)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m):
+        for j in range(n):
+            if lines_a[i] == lines_b[j]:
+                dp[i + 1][j + 1] = dp[i][j] + 1
+            else:
+                dp[i + 1][j + 1] = max(dp[i + 1][j], dp[i][j + 1])
+    diff_output = []
+    i, j = m, n
+    while i > 0 or j > 0:
+        if i > 0 and j > 0 and lines_a[i - 1] == lines_b[j - 1]:
+            diff_output.append(f"  {lines_a[i - 1]}")
+            i -= 1; j -= 1
+        elif j > 0 and (i == 0 or dp[i][j - 1] >= dp[i - 1][j]):
+            diff_output.append(f"+ {lines_b[j - 1]}")
+            j -= 1
+        else:
+            diff_output.append(f"- {lines_a[i - 1]}")
+            i -= 1
+    return list(reversed(diff_output))
+```
 
 #### 2) Merge (브랜치 병합) 흉내내기 설계
 - **명령어**: `merge <branch_name>`
