@@ -17,17 +17,31 @@
 
 | 도구 파일명 | 역할 및 기능 | 실행 명령어 |
 | :--- | :--- | :--- |
-| [`validate_rules_sync.py`](file:///Users/mpeg46551/b5_1/utils/validate_rules_sync.py) | `GEMINI.md`와 `AGENTS.md` 파일 쌍(총 5개 디렉터리)의 100% 동일 동기화 여부를 자동 검수하고 필요 시 자동 복구(`--fix`) | `python3 utils/validate_rules_sync.py [--fix]` |
-| [`validate_mermaid_syntax.py`](file:///Users/mpeg46551/b5_1/utils/validate_mermaid_syntax.py) | 마크다운 내 Mermaid 다이어그램에서 엣지 라벨(`\|...\|`) 괄호 등 파서 오류 유발 문법을 전수 자동 검사 | `python3 utils/validate_mermaid_syntax.py [path]` |
-| [`inspect_codebase_memory.py`](file:///Users/mpeg46551/b5_1/utils/inspect_codebase_memory.py) | 전체 코드베이스의 구조와 책임 심볼을 색인화하여 Fast Lookup Map 마크다운 테이블 자동 생성 | `python3 utils/inspect_codebase_memory.py` |
-| [`scaffold_assignment_harness.py`](file:///Users/mpeg46551/b5_1/utils/scaffold_assignment_harness.py) | 새 과제 디렉터리에 듀얼 규칙, 하네스 도구, 표준 폴더, QA/학습 문서 템플릿 일괄 자동 구축 | `python3 utils/scaffold_assignment_harness.py --target-dir <경로> --name <과제명>` |
-| [`time_utils.py`](file:///Users/mpeg46551/b5_1/utils/time_utils.py) | KST(한국 표준시) 포맷팅 문자열 생성 (`YYYY-MM-DD HH:MM:SS KST`) | `python3 utils/time_utils.py` |
+| [`monitor_agy_live.py`](file:///Users/mpeg46551/b5_2/utils/monitor_agy_live.py) | agy 세션의 내부 사고(Thinking) 및 도구 행동(Action)을 실시간 컬러 스트리밍으로 모니터링 | `python3 utils/monitor_agy_live.py [--history N]` |
+| [`validate_rules_sync.py`](file:///Users/mpeg46551/b5_2/utils/validate_rules_sync.py) | `GEMINI.md`와 `AGENTS.md` 파일 쌍의 100% 동일 동기화 여부를 자동 검수하고 필요 시 자동 복구(`--fix`) | `python3 utils/validate_rules_sync.py [--fix]` |
+| [`validate_mermaid_syntax.py`](file:///Users/mpeg46551/b5_2/utils/validate_mermaid_syntax.py) | 마크다운 내 Mermaid 다이어그램에서 엣지 라벨(`\|...\|`) 괄호 등 파서 오류 유발 문법을 전수 자동 검사 | `python3 utils/validate_mermaid_syntax.py [path]` |
+| [`inspect_codebase_memory.py`](file:///Users/mpeg46551/b5_2/utils/inspect_codebase_memory.py) | 전체 코드베이스의 구조와 책임 심볼을 색인화하여 Fast Lookup Map 마크다운 테이블 자동 생성 | `python3 utils/inspect_codebase_memory.py` |
+| [`scaffold_assignment_harness.py`](file:///Users/mpeg46551/b5_2/utils/scaffold_assignment_harness.py) | 새 과제 디렉터리에 듀얼 규칙, 하네스 도구, 표준 폴더, QA/학습 문서 템플릿 일괄 자동 구축 | `python3 utils/scaffold_assignment_harness.py --target-dir <경로> --name <과제명>` |
+| [`time_utils.py`](file:///Users/mpeg46551/b5_2/utils/time_utils.py) | KST(한국 표준시) 포맷팅 문자열 생성 (`YYYY-MM-DD HH:MM:SS KST`) | `python3 utils/time_utils.py` |
 
 ---
 
 ## 📖 3. 상세 사용 가이드
 
-### ① 규칙 파일 상호 동기화 검수 (`validate_rules_sync.py`)
+### ① agy 실시간 사고 및 행동 라이브 모니터링 (`monitor_agy_live.py`)
+다른 터미널이나 백그라운드에서 동작 중인 agy 세션의 내부 생각(Thinking/CoT)과 파일/도구 실행(Action)을 실시간 컬러 스트리밍으로 관찰합니다:
+```bash
+# 가장 최근 agy 세션을 자동 감지하여 실시간 스트리밍
+python3 utils/monitor_agy_live.py
+
+# 최근 10개 스텝 과거 기록부터 이어서 실시간 모니터링
+python3 utils/monitor_agy_live.py --history 10
+
+# 특정 세션 ID 지정 모니터링
+python3 utils/monitor_agy_live.py --session <세션ID>
+```
+
+### ② 규칙 파일 상호 동기화 검수 (`validate_rules_sync.py`)
 전체 디렉터리(`root`, `src/`, `docs/`, `study/`, `utils/`)의 `GEMINI.md`와 `AGENTS.md` 일치 여부를 검사합니다:
 ```bash
 # 동기화 상태 검사만 수행
@@ -37,7 +51,7 @@ python3 utils/validate_rules_sync.py
 python3 utils/validate_rules_sync.py --fix
 ```
 
-### ② Mermaid 다이어그램 문법 검사 (`validate_mermaid_syntax.py`)
+### ③ Mermaid 다이어그램 문법 검사 (`validate_mermaid_syntax.py`)
 마크다운 문서 내의 Mermaid 다이어그램 렌더링 에러를 사전에 방지합니다:
 ```bash
 # 전체 마크다운 파일 일괄 검사
@@ -47,29 +61,29 @@ python3 utils/validate_mermaid_syntax.py
 python3 utils/validate_mermaid_syntax.py study/README.md
 ```
 
-### ③ 하네스 색인 맵 생성 (`inspect_codebase_memory.py`)
+### ④ 하네스 색인 맵 생성 (`inspect_codebase_memory.py`)
 작업 메모리(`activity_log.md`) 갱신 시 최신 코드베이스 색인 표를 출력합니다:
 ```bash
 python3 utils/inspect_codebase_memory.py
 ```
 
-### ④ 현재 로컬 시각(KST) 확인 (`time_utils.py`)
+### ⑤ 현재 로컬 시각(KST) 확인 (`time_utils.py`)
 보고 표준에 필요한 KST 타임스탬프를 출력합니다:
 ```bash
 python3 utils/time_utils.py
 ```
 
-### ⑤ 새 과제 하네스 일괄 자동 구축 (`scaffold_assignment_harness.py`)
+### ⑥ 새 과제 하네스 일괄 자동 구축 (`scaffold_assignment_harness.py`)
 새로운 과제 디렉터리에 듀얼 규칙, 하네스 도구, 표준 폴더, QA/학습 문서 템플릿을 단 한 번의 명령으로 일괄 구축합니다:
 ```bash
 python3 utils/scaffold_assignment_harness.py --target-dir <대상경로> --name <과제식별자>
 ```
 
-### ⑥ 올인원 과제 이식 턴키 키트 (`harness/`)
+### ⑦ 올인원 과제 이식 턴키 키트 (`harness/`)
 새로운 과제로 단 1개 폴더만 복사하여 즉시 하네스 환경을 이식할 수 있는 자립형 패키지가 루트의 [`harness/`](../harness/README.md) 디렉터리에 준비되어 있습니다:
 ```bash
 # 새 과제 폴더로 harness 복사 후 설치
-cp -r /Users/mpeg46551/b5_1/harness /path/to/new_project/
+cp -r /Users/mpeg46551/b5_2/harness /path/to/new_project/
 python3 /path/to/new_project/harness/setup_harness.py
 ```
 
