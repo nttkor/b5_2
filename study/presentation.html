@@ -35,6 +35,46 @@
             justify-content: space-between;
         }
 
+        @page {
+            size: 16in 9in;
+            margin: 0;
+        }
+
+        @media print {
+            html, body {
+                width: 16in !important;
+                height: auto !important;
+                overflow: visible !important;
+                background-color: #0d1117 !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .progress-bar-container, .footer {
+                display: none !important;
+            }
+            .deck-container {
+                padding: 0 !important;
+                display: block !important;
+                width: 16in !important;
+            }
+            .slide {
+                display: flex !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                width: 16in !important;
+                height: 9in !important;
+                max-width: 16in !important;
+                max-height: 9in !important;
+                padding: 0.8in 1.0in !important;
+                page-break-after: always !important;
+                break-after: page !important;
+                background-color: #0d1117 !important;
+                box-sizing: border-box !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+
         /* Top Progress Bar */
         .progress-bar-container {
             width: 100%;
