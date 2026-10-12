@@ -10,7 +10,7 @@
 > - 📝 **미션 수행 및 요구사항 심층 Q&A**: [`docs/b5_2_mission_QA.md`](b5_2_mission_QA.md)
 > - 📖 **프로젝트 메인 안내서**: [`README.md`](../README.md)
 > - 🏗️ **아키텍처 및 상세 실행도**: [`study/README.md`](../study/README.md)
-> - 💡 **구술 평가 대비 질문/답변서**: [`READYOU.md`](../READYOU.md)
+> - 💡 **구술 평가 대비 질문/답변서**: [`READYOU.md`](READYOU.md)
 
 ---
 

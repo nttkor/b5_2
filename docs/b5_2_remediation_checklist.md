@@ -6,7 +6,7 @@
 > - 📊 **사전 평가 결과 및 보완 계획서**: [`docs/b5_2_pre_eval_plan.md`](b5_2_pre_eval_plan.md)
 > - 🎯 **종합 평가문항 심층 기술 답변서**: [`docs/b5_2_eval_QA.md`](b5_2_eval_QA.md)
 > - 📖 **프로젝트 메인 안내서**: [`README.md`](../README.md)
-> - 💡 **구술 평가 대비 질문/답변 대본**: [`READYOU.md`](../READYOU.md)
+> - 💡 **구술 평가 대비 질문/답변 대본**: [`READYOU.md`](READYOU.md)
 > - 🛠️ **유틸리티 패키지 안내서**: [`utils/README.md`](../utils/README.md)
 
 ---

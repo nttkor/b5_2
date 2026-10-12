@@ -4,11 +4,12 @@
 물어봤을 때 코드를 다시 읽으며 더듬거리지 않으려고 쓴다.
 
 > 💡 **연관 핵심 문서 상호 링크**:
-> - 📖 **프로젝트 메인 안내서**: [`README.md`](README.md)
-> - 🏗️ **아키텍처 및 상세 실행도**: [`study/README.md`](study/README.md)
-> - 📚 **핵심 개념 및 기술 용어 백과사전**: [`study/study.md`](study/study.md)
-> - 📝 **미션 수행 및 요구사항 심층 Q&A**: [`docs/b5_2_mission_QA.md`](docs/b5_2_mission_QA.md)
-> - 🎯 **종합 평가문항 답변서**: [`docs/b5_2_eval_QA.md`](docs/b5_2_eval_QA.md)
+> - 📖 **프로젝트 메인 안내서**: [`../README.md`](../README.md)
+> - 🏗️ **아키텍처 및 상세 실행도**: [`../study/README.md`](../study/README.md)
+> - 📚 **핵심 개념 및 기술 용어 백과사전**: [`../study/study.md`](../study/study.md)
+> - 📝 **미션 수행 및 요구사항 심층 Q&A**: [`b5_2_mission_QA.md`](b5_2_mission_QA.md)
+> - 🎯 **종합 평가문항 답변서**: [`b5_2_eval_QA.md`](b5_2_eval_QA.md)
+> - ✅ **보완 점검표 및 실시 내역**: [`b5_2_remediation_checklist.md`](b5_2_remediation_checklist.md)
 
 ## 전체 아키텍처
 

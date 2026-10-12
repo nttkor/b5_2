@@ -337,7 +337,6 @@ Ancestors of cf127b:
 ├── main.py                          # CLI REPL 엔트리 포인트
 ├── test_mini_git.py                  # 12대 전수 단위/통합 테스트 스위트
 ├── README.md                        # [본 문서] 프로젝트 메인 아키텍처 및 종합 가이드
-├── READYOU.md                       # 구술 평가 대비 상세 대본
 ├── GEMINI.md / AGENTS.md             # 7대 핵심 운영 규칙 (100% 동기화)
 ├── src/                             # 핵심 소스코드 패키지
 │   ├── commit.py                    # Commit 노드 엔티티 (해시, 부모, 불변성 방어벽)
@@ -347,6 +346,7 @@ Ancestors of cf127b:
 │   ├── sorting.py                   # 분할 정복 안정 병합 정렬 (Merge Sort, key 기본값)
 │   └── cli.py                       # CLI REPL 컨트롤러 및 shlex 커맨드 디스패처 (HELP/Ctrl+C 방어)
 ├── docs/                            # 미션, 평가 및 보완 계획 문서
+│   ├── READYOU.md                   # 구술 평가 대비 상세 대본
 │   ├── b5_2_pre_eval_plan.md         # 사전 평가 18개 항목 분석 및 종합 보완 계획서
 │   ├── b5_2_remediation_checklist.md # 5단계 실시계획 및 18+5대 전수 점검표
 │   ├── b5_2_eval_QA.md              # 종합 평가문항 5대 항목 심층 기술 답변서
@@ -398,10 +398,11 @@ python3 test_mini_git.py
 ## 🔗 10. 상호 참조 링크 허브 (Cross-References)
 
 - 📊 [사전 평가 결과 및 종합 보완 계획서 (docs/b5_2_pre_eval_plan.md)](docs/b5_2_pre_eval_plan.md)
+- 📋 [보완 실시계획 및 점검표 (docs/b5_2_remediation_checklist.md)](docs/b5_2_remediation_checklist.md)
 - 🎯 [종합 평가문항 5대 항목 심층 답변서 (docs/b5_2_eval_QA.md)](docs/b5_2_eval_QA.md)
 - 📝 [미션 심층 Q&A (docs/b5_2_mission_QA.md)](docs/b5_2_mission_QA.md)
 - 📚 [CS 핵심 개념 및 기술 백과사전 (study/study.md)](study/study.md)
 - 🏗️ [종합 아키텍처 및 상세 실행도 (study/README.md)](study/README.md)
-- 💡 [구술 평가 대비 질문/답변 대본 (READYOU.md)](READYOU.md)
+- 💡 [구술 평가 대비 질문/답변 대본 (docs/READYOU.md)](docs/READYOU.md)
 - 🎯 [구술/실기 평가표 (docs/b5_2_eval.md)](docs/b5_2_eval.md)
 - 📜 [커밋 컨벤션 지침 (docs/CONVENTIONS.md)](docs/CONVENTIONS.md)

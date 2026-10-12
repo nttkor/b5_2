@@ -30,7 +30,7 @@ FILE_METADATA = {
     "docs/b5_2_remediation_checklist.md": ("보완 실시계획 및 점검표", "5단계 실시계획, 세부 작업 명세서, 18+5대 전수 점검표"),
     "docs/CONVENTIONS.md": ("커밋 및 코드 컨벤션", "Conventional Commits 규칙, 코드 스타일 정의"),
     "README.md": ("프로젝트 메인 안내서", "프로젝트 아키텍처, 실행 방법, 명령어 레퍼런스, 상호 링크 허브"),
-    "READYOU.md": ("구술 평가 대비 상세 문서", "DAG 구조, 최단 경로, 위상 정렬, 역색인 핵심 원리 대본"),
+    "docs/READYOU.md": ("구술 평가 대비 상세 문서", "DAG 구조, 최단 경로, 위상 정렬, 역색인 핵심 원리 대본"),
     "study/README.md": ("프로젝트 종합 가이드", "개요, 상세, 구현 기능 목록, 폴더 트리, 단독 분리형 머메이드 실행도"),
     "study/study.md": ("핵심 개념 백과사전", "DAG, Kahn 위상정렬, BFS 최단경로, 역색인, 병합정렬, SHA-1 CS 총정리"),
     "GEMINI.md": ("프로젝트 전역 규칙 파일", "7대 핵심 운영 규칙 (AGENTS.md와 100% 동기화)"),

@@ -13,7 +13,7 @@
 - 🏗️ **아키텍처 및 상세 실행도**: [`study/README.md`](README.md)
 - 📝 **미션 수행 및 요구사항 심층 Q&A**: [`docs/b5_2_mission_QA.md`](../docs/b5_2_mission_QA.md)
 - 🎯 **종합 평가문항 답변서**: [`docs/b5_2_eval_QA.md`](../docs/b5_2_eval_QA.md)
-- 💡 **구술 평가 대비 질문/답변서**: [`READYOU.md`](../READYOU.md)
+- 💡 **구술 평가 대비 질문/답변서**: [`docs/READYOU.md`](../docs/READYOU.md)
 - 💻 **핵심 구현 소스코드**:
   - 커밋 노드 엔티티: [`src/commit.py`](../src/commit.py#L7-L38)
   - 저장소 및 형상 관리 엔진: [`src/repo.py`](../src/repo.py#L14-L75)
