@@ -89,6 +89,12 @@ def test_search_uses_inverted_index(
     assert repo.index.search_keyword("nonexistent") == []
     assert repo.index.search_author("Alice") == [root.hash, login.hash, payment.hash]
 
+    # 동일 커밋 내 중복 키워드 등장 시 포스팅 리스트 해시 유일성(1회 등록) 검증
+    dup_commit = Commit("dup1", "fix bug bug fix", "Alice", "t4", [], 4)
+    repo.index.add(dup_commit)
+    assert repo.index.search_keyword("bug") == ["dup1"]
+    assert repo.index.search_keyword("fix") == ["dup1"]
+
 
 def test_shortest_path_lexicographic_tiebreak() -> None:
     """최단 거리가 동일한 복수 경로 중 사전순 타이브레이크 규칙을 검증합니다."""
@@ -172,7 +178,10 @@ def test_cycle_detection_in_topological_order() -> None:
         topological_order(cyclic_commits)
         assert False, "RepoError expected for cyclic graph"
     except RepoError as e:
-        assert "Cycle detected" in str(e)
+        msg = str(e)
+        assert "Cycle detected" in msg
+        assert "processed 0 of 2 nodes" in msg
+        assert "unresolved nodes forming cycle" in msg
 
 
 def test_deterministic_seed_reproducibility() -> None:

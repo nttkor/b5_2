@@ -77,7 +77,11 @@ def topological_order(commits_by_hash: dict[str, Commit]) -> list[str]:
 
     # Kahn 알고리즘 사이클 감지: 위상 정렬된 정점 수가 전체 정점 수와 불일치 시 예외 발생
     if len(order) != len(commits_by_hash):
-        raise RepoError("Cycle detected in commit graph: not a valid DAG")
+        unresolved = [h for h in commits_by_hash if h not in order]
+        raise RepoError(
+            f"Cycle detected in commit graph: processed {len(order)} of {len(commits_by_hash)} nodes "
+            f"(unresolved nodes forming cycle: {unresolved})"
+        )
 
     return order
 

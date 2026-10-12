@@ -118,7 +118,7 @@ def dispatch(repo: Repository, tokens: Sequence[str]) -> str:
             "  COMMIT <message>           - 현재 브랜치에 신규 커밋 생성\n"
             "  LOG [--sort-by=date|author]- 위상 정렬 또는 날짜/작성자별 로그 출력\n"
             "  PATH <commit1> <commit2>   - 두 커밋 간 무방향 최단 경로 탐색\n"
-            "  ANCESTORS <commit_hash>    - 특정 커밋의 모든 조상 커밋 탐색\n"
+            "  ANCESTORS <commit_hash>    - 특정 커밋의 모든 조상 커밋 탐색 (order 오름차순 정렬)\n"
             "  SEARCH <keyword>           - 메시지 키워드 역색인 검색\n"
             "  SEARCH --author=<name>     - 작성자별 커밋 역색인 검색\n"
             "  exit / quit                - REPL 쉘 종료"

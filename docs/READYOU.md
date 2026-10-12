@@ -185,7 +185,7 @@ def merge_sort(items, key):
   쪼개는 과정(log n번)마다 병합에 O(n)이 걸리기 때문에 입력이 어떻게
   생겼든 항상 같다. 퀵 정렬을 안 쓴 이유가 이거다 — 퀵 정렬은 평균은
   O(n log n)이지만 이미 정렬된 입력 같은 최악의 경우 O(n²)로 무너진다.
-- **안정 정렬(stable) 여부**: 안정적이다. `_merge`에서 동점 비교를 `<=`로
+- **안정 정렬(stable) 여부와 메모리 비용**: 안정적이다. `_merge`에서 동점 비교를 `<=`로
   처리해서, 왼쪽(원래 앞쪽에 있던) 원소를 항상 먼저 넣는다.
 
   ```python
@@ -199,6 +199,8 @@ def merge_sort(items, key):
   같은 작성자 커밋들의 순서가 뒤집힐 수 있다 — `test_mini_git.py`의
   `test_merge_sort_is_correct_and_stable`이 `key`가 같은 세 원소가
   입력 순서(`x, y, z`)를 유지하는지 검증한다.
+  단, 병합 단계에서 임시 버퍼 리스트를 할당하므로 **O(N)의 추가 메모리 공간(Auxiliary Space)**을
+  소모한다. 힙 정렬 같은 제자리 정렬(In-place)을 포기하는 대신 안정성과 O(N log N) 상한을 챙긴 선택이다.
 
 ---
 
@@ -211,15 +213,20 @@ def merge_sort(items, key):
 ```python
 class InvertedIndex:
     def add(self, commit):
+        seen_tokens = set()
         for token in commit.message.lower().split():
-            self.by_keyword.setdefault(token, []).append(commit.hash)
+            if token not in seen_tokens:
+                seen_tokens.add(token)
+                self.by_keyword.setdefault(token, []).append(commit.hash)
         self.by_author.setdefault(commit.author, []).append(commit.hash)
 ```
 
 핵심 아이디어는 "훑는 작업을 검색 시점이 아니라 커밋 시점으로 옮긴다"는
 것이다. `COMMIT`이 일어날 때마다 메시지를 토큰화해서
 `keyword -> [hash, ...]`, `author -> [hash, ...]` 두 딕셔너리를 갱신해
-둔다. 그러면 `SEARCH login`은 그냥 `by_keyword["login"]`을 꺼내는
+둔다. 특히 한 메시지 안에 같은 단어가 여러 번 나와도 `seen_tokens`로
+중복 등록을 막아 포스팅 리스트의 해시 유일성을 보장하고, 커밋 생성 순서(`order`)를
+그대로 유지한다. 그러면 `SEARCH login`은 그냥 `by_keyword["login"]`을 꺼내는
 딕셔너리 조회 한 번, 즉 O(1) 조회 + O(결과 개수)로 끝난다.
 
 전체 커밋이 N개, 검색 결과가 K개라고 하면: 순회 검색은 검색 1회당
@@ -227,6 +234,9 @@ O(N), 역색인은 O(1) 조회 + O(K)다. 대신 그만큼 "쓰기 비용"을 �
 시점으로 옮긴 것뿐이다 — 공짜는 아니고, "검색은 자주 하고 커밋은
 상대적으로 덜 한다"는 가정(로그 서비스, 코드 검색 등 실제 Git
 워크플로우와 잘 맞는 가정) 위에서 이득을 보는 트레이드오프다.
+실제로 5,000노드 PoC(`utils/poc_scalability.py`)를 돌려보니 역색인의
+문자열 맵을 4바이트 정수 ID로 압축했을 때 **RAM을 92.9%나 절감**할 수 있음을
+실측으로 확인했다.
 
 ---
 

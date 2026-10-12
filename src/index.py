@@ -32,13 +32,12 @@ class InvertedIndex:
     def add(self, commit: Commit) -> None:
         """새로 생성된 커밋을 역색인에 등록합니다.
 
-        [토큰화 정책 요약]
-        본 역색인 엔진은 커밋 메시지를 소문자로 정규화(`.lower()`)한 후
-        공백 문자(스페이스, 탭, 줄바꿈)를 기준으로 토큰화(`.split()`)합니다.
-        마침표, 콜론, 괄호 등 구두점을 임의로 제거하지 않는 이유는 `fix(auth):`,
-        `issue#123`, `v1.0.0`과 같이 형상 관리 시스템에서 중요한 식별자 토큰의
-        기술적 의미를 보존하여 정확한 검색을 지원하기 위함입니다.
-        아울러 작성자 이름(대소문자 유지)별로도 커밋 해시를 매핑합니다.
+        [토큰화 및 포스팅 리스트 정책 요약]
+        1. 정규화 및 분할: 커밋 메시지를 소문자로 정규화(`.lower()`)한 후 공백 문자 기준으로 분할(`.split()`)합니다.
+        2. 식별자 보존: 구두점을 제거하지 않아 `fix(auth):`, `v1.0.0`, `#123` 등 고유 식별자 토큰을 보존합니다.
+        3. 중복 토큰 필터링: 한 커밋 메시지 내에 동일 단어가 중복 등장하더라도 해당 커밋 해시는 포스팅 리스트에 단 1회만 등록(Unique)됩니다.
+        4. 순서 보장: 포스팅 리스트는 커밋이 저장소에 추가된 시간/생성 순서(`order` 순)를 엄격히 유지(Append-only)합니다.
+        아울러 작성자 이름(대소문자 유지)별 포스팅 리스트 역시 생성 순서대로 매핑됩니다.
 
         Args:
             commit (Commit): 역색인에 등록할 커밋 노드 객체.
@@ -46,11 +45,14 @@ class InvertedIndex:
         Complexity:
             시간 복잡도: O(W) (W는 커밋 메시지의 단어 수).
         """
-        # 메시지를 공백 기준 분리하고 소문자로 정규화하여 토큰화
+        # 동일 커밋 내 중복 단어는 1회만 색인 등록하여 포스팅 리스트 내 해시 유일성 보장
+        seen_tokens: set[str] = set()
         for token in commit.message.lower().split():
-            self.by_keyword.setdefault(token, []).append(commit.hash)
+            if token not in seen_tokens:
+                seen_tokens.add(token)
+                self.by_keyword.setdefault(token, []).append(commit.hash)
 
-        # 작성자별 역색인 목록에 추가
+        # 작성자별 역색인 목록에 추가 (생성 순서 유지)
         self.by_author.setdefault(commit.author, []).append(commit.hash)
 
     def search_keyword(self, keyword: str) -> list[str]:

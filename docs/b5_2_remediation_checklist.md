@@ -187,31 +187,31 @@ flowchart TD
 
 ## 4. Mini Git 18+5대 전수 점검표 (Comprehensive Audit Checklist)
 
-| 번호 | 점검 항목 및 요구 기준 | 대상 파일 / 영역 | 담당 Phase | 상태 |
-| :---: | :--- | :--- | :---: | :---: |
-| **#1** | INIT 재호출 시 기존 상태 리셋 정책 1줄 명시 | `README.md`, `src/repo.py` | Phase 1, 4 | **[x] 완료** |
-| **#2** | 브랜치 중복 생성 시 덮어쓰기 정책 1문장 명시 | `README.md`, `src/repo.py` | Phase 1, 4 | **[x] 완료** |
-| **#3** | 위상정렬 타이브레이크(order/hash) 구체적 예시 추가 | `README.md` | Phase 4 | **[x] 완료** |
-| **#4** | 사전순 타이브레이크 선택 근거 인라인 주석 1줄 요약 | `src/graph.py` | Phase 1 | **[x] 완료** |
-| **#5** | ANCESTORS DFS 방문 순서 반환 규칙 1줄 명시 | `README.md` | Phase 4 | **[x] 완료** |
-| **#6** | 잘못된 옵션 플래그 입력 시 허용 옵션 가이드 에러 메시지 출력 | `src/cli.py` | Phase 1 | **[x] 완료** |
-| **#7** | Commit 객체 불변성 보증 주석 및 코드 레벨 방어벽 | `src/repo.py`, `src/commit.py` | Phase 1 | **[x] 완료** |
-| **#8** | MAX_COLLISION_RETRIES = 1000 상수 노출 및 초과 예외 처리 | `src/repo.py` | Phase 1 | **[x] 완료** |
-| **#9** | 토큰화(소문자, 공백 split, 구두점 보존) 정책 docstring 요약 | `src/index.py` | Phase 1 | **[x] 완료** |
-| **#10** | 그래프 전처리(인접 리스트 메모이제이션) 캐싱 전략 주석/기술 | `src/graph.py`, `README.md` | Phase 1, 4 | **[x] 완료** |
-| **#11** | 주요 함수(sorting, graph) docstring에 입출력 예시 추가 | `src/sorting.py`, `src/graph.py` | Phase 1 | **[x] 완료** |
-| **#12** | 사이클 감지 시 RepoError 예외 발생 및 단위 테스트 검증 | `src/graph.py`, `test_mini_git.py` | Phase 1, 2 | **[x] 완료** |
-| **#13** | LOG 전체 그래프 순회 비용 명시 및 증분 정렬 대체 힌트 추가 | `README.md` | Phase 4 | **[x] 완료** |
-| **#14** | PATH용 인접 리스트 재사용 및 Bi-BFS 가능성 기술 | `README.md` | Phase 4 | **[x] 완료** |
-| **#15** | merge_sort key 매개변수 타입/기본값 설명 및 사용 예시 추가 | `src/sorting.py` | Phase 1 | **[x] 완료** |
-| **#16** | 역색인 메모리 비용($O(N \cdot T)$) 숫자 추정 표 추가 | `README.md` | Phase 4 | **[x] 완료** |
-| **#17** | 대규모 확장성 실측 벤치마크 PoC 툴 개발 및 수치 인용 | `utils/poc_scalability.py`, `README.md` | Phase 3, 4 | **[x] 완료** |
-| **#18** | 결정론적 시드 모드 옵션 추가 및 단위 테스트/README 가이드 | `src/repo.py`, `test_mini_git.py`, `README.md` | Phase 1, 2, 4 | **[x] 완료** |
-| **+1** | Commit `__setattr__` 불변성 강제 방어벽 | `src/commit.py` | Phase 1 | **[x] 완료** |
-| **+2** | REPL `KeyboardInterrupt` (Ctrl+C) 정상 종료 방어 | `src/cli.py` | Phase 1 | **[x] 완료** |
-| **+3** | REPL `HELP` / `?` 명령어 가이드 지원 | `src/cli.py` | Phase 1 | **[x] 완료** |
-| **+4** | `utils/README.md`에 PoC 벤치마크 툴 명세 등록 및 영구 자산화 | `utils/README.md` | Phase 3 | **[x] 완료** |
-| **+5** | `READYOU.md` 구술 평가 대본 신규 작성 및 최신 아키텍처 동기화 | `READYOU.md` | Phase 4 | **[x] 완료** |
+| 번호 | 점검 항목 및 요구 기준 | 대상 파일 / 영역 | 구현 및 보완 세부 내용 | 상태 |
+| :---: | :--- | :--- | :--- | :---: |
+| **#1** | INIT 재초기화 시 데이터 손실 영향 및 사용 예시 | `README.md`, `src/repo.py` | 기존 커밋/브랜치/역색인 완전 리셋 영향 명시 및 REPL 예시 블록 추가 | **[x] 완료** |
+| **#2** | SWITCH 실패 케이스 및 COMMIT 브랜치 포인터 갱신 예시 | `README.md`, `src/repo.py` | 존재하지 않는 브랜치 에러 및 커밋 후 HEAD/포인터 갱신 CLI 예시 추가 | **[x] 완료** |
+| **#3** | 위상정렬 타이브레이크 기준(order/hash) 한 문단 요약 | `README.md`, `src/graph.py` | `(c.order, c.hash)` 복합 정렬 키를 사용한 100% 결정론적 순서 보장 요약 | **[x] 완료** |
+| **#4** | 무방향 PATH 사전순 타이브레이크 의도 및 다이아몬드 분기 예시 | `README.md`, `src/graph.py` | 동일 거리 시 사전순 타이브레이크 의도 및 다이아몬드 머지 분기 예시 명시 | **[x] 완료** |
+| **#5** | ANCESTORS 출력 시 order 기준 오름차순 안정 정렬 명시 | `README.md`, `src/cli.py` | CLI 계층에서 `c.order` 기준 merge_sort 오름차순 정렬 출력 명시 | **[x] 완료** |
+| **#6** | 옵션 조합 및 복합 인자 오류 처리 가이드 및 예시 | `README.md`, `src/cli.py` | 알 수 없는 플래그/유효하지 않은 정렬값/복합 인자 혼용 에러 안내 예시 추가 | **[x] 완료** |
+| **#7** | HEAD/branches 갱신 원자성 가정 및 단일 스레드 제한사항 | `README.md`, `src/commit.py` | 인메모리 단일 스레드 원자성 가정 및 멀티스레드 락 필요성 명시, 불변성 보증 | **[x] 완료** |
+| **#8** | 해시 충돌 상한(1,000회) 초과 시 운영 권고 안내 | `README.md`, `src/repo.py` | `MAX_COLLISION_RETRIES = 1000` 노출 및 초과 시 seed 변경/메시지 수정 안내 | **[x] 완료** |
+| **#9** | 토큰화 정책 및 동일 커밋 내 중복 단어 필터링 정책 | `README.md`, `src/index.py` | `seen_tokens = set()`을 통한 커밋 내 중복 키워드 1회 등록(유니크 보장) 정책 명시 | **[x] 완료** |
+| **#10** | 그래프 전처리 인접 리스트 캐시(`_undirected_adjacency`) 지침 | `README.md`, `src/graph.py` | 읽기 질의 구간 인접 리스트 캐싱 재사용 지침 명시 (2.0배 지연 단축 실측) | **[x] 완료** |
+| **#11** | Google Style docstring 및 일관된 주석 스타일 규칙 요약 | `docs/CONVENTIONS.md` | `CONVENTIONS.md`에 모듈/함수/헬퍼 docstring 표준 및 `Args/Returns/Raises` 명시 | **[x] 완료** |
+| **#12** | 사이클 감지 시 처리 노드 수 및 unresolved 노드 진단 로깅 | `src/graph.py`, `test_mini_git.py` | 사이클 예외에 `processed {k} of {n} nodes (unresolved nodes: ...)` 진단 메시지 추가 | **[x] 완료** |
+| **#13** | 대형 저장소 LOG 비용 완화(페이징/세대번호) 권장 사항 | `README.md` | $V \ge 10^5$ 환경에서 전체 위상정렬 대신 페이징(`--max-count=N`) 및 세대번호 권고 | **[x] 완료** |
+| **#14** | 빈도 높은 PATH 조회를 위한 양방향 BFS(Bi-BFS) 도입 가이드 | `README.md`, `study/study.md` | 양방향 BFS의 $O(b^{d/2})$ 탐색 공간 축소 원리 및 대규모 네트워크 도입 지침 기술 | **[x] 완료** |
+| **#15** | merge_sort의 시간 및 메모리 공간($O(N)$ 버퍼) 특성 요약 | `README.md`, `src/sorting.py` | 최악 $O(N \log N)$ 시간 확정보장 및 $O(N)$ Auxiliary Space 메모리 트레이드오프 명시 | **[x] 완료** |
+| **#16** | 포스팅 리스트의 중복 방지 및 정렬 순서 보장(Append-only) 정책 | `README.md`, `src/index.py` | 생성 순서(`order`) 유지 및 `by_keyword`/`by_author` 리스트의 유니크/정렬 보장 명시 | **[x] 완료** |
+| **#17** | 대규모 5,000노드 PoC 핵심 벤치마크 수치 README 상단 요약 | `README.md`, `utils/poc_scalability.py` | 위상정렬 1,767배, 캐싱 2.0배, 메모리 92.9% 절감 수치를 README 상단 배너에 요약 | **[x] 완료** |
+| **#18** | 재현성 모드(CI 테스트용 seed) vs 비결정 모드(실운영) 권고 | `README.md`, `src/repo.py` | CI 단위 테스트에는 결정론적 `seed`, 실 REPL 운영에는 비결정 타임스탬프 권고 | **[x] 완료** |
+| **+1** | Commit `__setattr__` 불변성 강제 방어벽 | `src/commit.py` | 초기화 완료 후 속성 변경 시 `AttributeError` 발생 강제 | **[x] 완료** |
+| **+2** | REPL `KeyboardInterrupt` (Ctrl+C) 정상 종료 방어 | `src/cli.py` | REPL 루프에서 Ctrl+C 발생 시 비정상 스택트레이스 없이 안전 종료 | **[x] 완료** |
+| **+3** | REPL `HELP` / `?` 명령어 가이드 지원 | `src/cli.py` | 전체 명령어 명세 및 옵션 안내를 지원하는 도움말 커맨드 추가 | **[x] 완료** |
+| **+4** | `utils/README.md`에 PoC 벤치마크 툴 명세 등록 및 영구 자산화 | `utils/README.md` | 5,000 커밋 대상 확장성 PoC 도구 명세 및 실행 가이드 문서화 | **[x] 완료** |
+| **+5** | `docs/READYOU.md` 구술 평가 대본 일원화 및 최신 아키텍처 동기화 | `docs/READYOU.md` | 단일 진실 공급원 확정, 8대 핵심 Q&A 및 PoC 실측 근거 동기화 | **[x] 완료** |
 
 ---
 
