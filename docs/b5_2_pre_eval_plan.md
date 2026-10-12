@@ -3,6 +3,7 @@
 본 문서는 Mini Git 프로젝트에 대해 실시된 사전 평가(Pre-Evaluation)의 18개 세부 평가 항목 결과를 면밀히 분석하고, 지적된 부족한 점 및 유일한 FAIL 항목(평가 항목 #17: 대규모 규모 증가 대비 병목 예측 및 개선 전략)을 완벽히 해결하기 위한 종합 보완 계획서입니다.
 
 > 💡 **연관 핵심 문서 상호 링크**:
+> - 📋 **보완 실시계획서 및 전수 점검표**: [`docs/b5_2_remediation_checklist.md`](b5_2_remediation_checklist.md)
 > - 📊 **구술/실기 평가표**: [`docs/b5_2_eval.md`](b5_2_eval.md)
 > - 📝 **종합 평가문항 심층 답변서**: [`docs/b5_2_eval_QA.md`](b5_2_eval_QA.md)
 > - ❓ **미션 심층 질의응답서**: [`docs/b5_2_mission_QA.md`](b5_2_mission_QA.md)
