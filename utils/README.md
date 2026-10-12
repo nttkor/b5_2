@@ -22,6 +22,7 @@
 | [`validate_mermaid_syntax.py`](file:///Users/mpeg46551/b5_2/utils/validate_mermaid_syntax.py) | 마크다운 내 Mermaid 다이어그램에서 엣지 라벨(`\|...\|`) 괄호 등 파서 오류 유발 문법을 전수 자동 검사 | `python3 utils/validate_mermaid_syntax.py [path]` |
 | [`inspect_codebase_memory.py`](file:///Users/mpeg46551/b5_2/utils/inspect_codebase_memory.py) | 전체 코드베이스의 구조와 책임 심볼을 색인화하여 Fast Lookup Map 마크다운 테이블 자동 생성 | `python3 utils/inspect_codebase_memory.py` |
 | [`scaffold_assignment_harness.py`](file:///Users/mpeg46551/b5_2/utils/scaffold_assignment_harness.py) | 새 과제 디렉터리에 듀얼 규칙, 하네스 도구, 표준 폴더, QA/학습 문서 템플릿 일괄 자동 구축 | `python3 utils/scaffold_assignment_harness.py --target-dir <경로> --name <과제명>` |
+| [`poc_scalability.py`](file:///Users/mpeg46551/b5_2/utils/poc_scalability.py) | 대규모 커밋(5,000~10,000건) 대상 위상정렬·인접리스트 캐싱·역색인 메모리 압축 실측 벤치마크 PoC | `python3 utils/poc_scalability.py` |
 | [`time_utils.py`](file:///Users/mpeg46551/b5_2/utils/time_utils.py) | KST(한국 표준시) 포맷팅 문자열 생성 (`YYYY-MM-DD HH:MM:SS KST`) | `python3 utils/time_utils.py` |
 
 ---
@@ -73,13 +74,19 @@ python3 utils/inspect_codebase_memory.py
 python3 utils/time_utils.py
 ```
 
-### ⑥ 새 과제 하네스 일괄 자동 구축 (`scaffold_assignment_harness.py`)
+### ⑥ 대규모 확장성 실측 벤치마크 PoC (`poc_scalability.py`)
+5,000~10,000개 커밋 대규모 그래프에서 위상정렬 vs 세대번호 증분 갱신 속도, 인접 리스트 캐싱 효과, 역색인 메모리 압축률을 정량적으로 실측합니다:
+```bash
+python3 utils/poc_scalability.py
+```
+
+### ⑦ 새 과제 하네스 일괄 자동 구축 (`scaffold_assignment_harness.py`)
 새로운 과제 디렉터리에 듀얼 규칙, 하네스 도구, 표준 폴더, QA/학습 문서 템플릿을 단 한 번의 명령으로 일괄 구축합니다:
 ```bash
 python3 utils/scaffold_assignment_harness.py --target-dir <대상경로> --name <과제식별자>
 ```
 
-### ⑦ 올인원 과제 이식 턴키 키트 (`harness/`)
+### ⑧ 올인원 과제 이식 턴키 키트 (`harness/`)
 새로운 과제로 단 1개 폴더만 복사하여 즉시 하네스 환경을 이식할 수 있는 자립형 패키지가 루트의 [`harness/`](../harness/README.md) 디렉터리에 준비되어 있습니다:
 ```bash
 # 새 과제 폴더로 harness 복사 후 설치

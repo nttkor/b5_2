@@ -6,6 +6,7 @@
 """
 
 from __future__ import annotations
+from typing import Any
 
 
 class Commit:
@@ -16,6 +17,7 @@ class Commit:
     commit, 1 for a normal commit, 2+ for a merge commit).
     order is the creation index, used to seed topological order and as a
     stable tie-breaker when sorting.
+    Commit instances are immutable once initialized.
 
     Attributes:
         hash (str): 커밋 식별용 6자리 16진수 고유 해시 문자열.
@@ -49,8 +51,23 @@ class Commit:
         self.message: str = message            # 커밋 로그 메시지
         self.author: str = author              # 작성자 명
         self.timestamp: str = timestamp        # 생성 타임스탬프
-        self.parents: list[str] = parents      # 부모 커밋 해시 리스트 (자식 -> 부모 방향 참조)
+        self.parents: list[str] = list(parents) # 부모 커밋 해시 리스트 (불변 복사본)
         self.order: int = order                # 생성 순서 식별자 (안정 정렬 타이브레이커)
+        self._initialized: bool = True         # 불변 객체 초기화 완료 플래그
+
+    def __setattr__(self, name: str, value: Any) -> None:
+        """커밋 객체의 불변성(Immutability)을 보장하기 위해 초기화 이후 속성 수정을 차단합니다.
+
+        Args:
+            name (str): 속성 이름.
+            value (Any): 설정할 값.
+
+        Raises:
+            AttributeError: 초기화 완료 후 속성 변경을 시도할 경우.
+        """
+        if getattr(self, "_initialized", False):
+            raise AttributeError(f"Commit objects are immutable: cannot modify '{name}'")
+        super().__setattr__(name, value)
 
     def __repr__(self) -> str:
         """개발 및 디버깅을 위한 커밋 표현식을 반환합니다.

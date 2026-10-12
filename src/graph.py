@@ -13,6 +13,7 @@ Kahn 알고리즘 기반 위상 정렬, 너비 우선 탐색(BFS) 기반 최단 
 from __future__ import annotations
 from typing import TYPE_CHECKING
 
+from .repo import RepoError
 from .sorting import merge_sort
 
 if TYPE_CHECKING:
@@ -37,9 +38,17 @@ def topological_order(commits_by_hash: dict[str, Commit]) -> list[str]:
     Returns:
         list[str]: 위상 정렬된 커밋 해시들의 리스트 (부모 -> 자식 순).
 
+    Raises:
+        RepoError: 그래프 내에 사이클(순환 참조)이 감지되어 DAG 조건을 만족하지 않는 경우.
+
     Complexity:
         - 시간 복잡도: O(V + E) + O(V log V) (초기 정렬 비용).
         - 공간 복잡도: O(V + E) (인접 리스트 및 진입차수 테이블).
+
+    Example:
+        >>> order = topological_order(repo.commits)
+        >>> print(order)  # 부모 커밋이 항상 자식 커밋보다 앞에 위치
+        ['c1', 'c2', 'c3']
     """
     # 1. 부모 -> 자식 방향 인접 리스트 및 자식 노드의 진입 차수(in-degree) 초기화
     children: dict[str, list[str]] = {h: [] for h in commits_by_hash}
@@ -66,11 +75,20 @@ def topological_order(commits_by_hash: dict[str, Commit]) -> list[str]:
             if indegree[child] == 0:
                 ready.append(child)
 
+    # Kahn 알고리즘 사이클 감지: 위상 정렬된 정점 수가 전체 정점 수와 불일치 시 예외 발생
+    if len(order) != len(commits_by_hash):
+        raise RepoError("Cycle detected in commit graph: not a valid DAG")
+
     return order
 
 
 def _undirected_adjacency(commits_by_hash: dict[str, Commit]) -> dict[str, list[str]]:
     """커밋-부모 간선을 양방향(무방향)으로 변환한 인접 리스트를 구성합니다.
+
+    그래프 전처리 캐시 전략:
+    커밋 쓰기가 없는 읽기 전용 질의 구간에서는 매 호출마다 adjacency를
+    새로 빌드하지 않고, 저장소(Repository) 레벨에서 인접 리스트를 캐싱하여
+    O(1) 시간으로 즉시 재사용할 수 있습니다.
 
     Args:
         commits_by_hash (dict[str, Commit]): 전체 커밋 딕셔너리.
@@ -139,6 +157,11 @@ def shortest_path(commits_by_hash: dict[str, Commit], start: str, end: str) -> l
     Complexity:
         - 시간 복잡도: O(V + E) (BFS 탐색 및 타깃 역추적 단계).
         - 공간 복잡도: O(V + E).
+
+    Example:
+        >>> path = shortest_path(repo.commits, '006077', 'c01cec')
+        >>> print(path)
+        ['006077', 'c01cec']
     """
     # 유효성 검사: 존재하지 않는 커밋인 경우 None
     if start not in commits_by_hash or end not in commits_by_hash:
@@ -159,7 +182,7 @@ def shortest_path(commits_by_hash: dict[str, Commit], start: str, end: str) -> l
     path: list[str] = [start]
     current = start
     while current != end:
-        # 목적지로 거리가 1 단축되는 이웃 후보들 중 해시 문자열 사전순으로 가장 작은 것 선택
+        # 사전순 타이브레이크: 동일 거리 복수 경로 발생 시 머신 독립적 재현성을 위해 사전순 노드 선택
         candidates = merge_sort(adjacency[current], key=lambda h: h)
         next_hop = None
         for neighbor in candidates:
@@ -190,6 +213,11 @@ def ancestors(commits_by_hash: dict[str, Commit], start_hash: str) -> set[str] |
     Complexity:
         - 시간 복잡도: O(V_ancestors + E_ancestors).
         - 공간 복잡도: O(V_ancestors) (방문 집합 및 스택).
+
+    Example:
+        >>> anc = ancestors(repo.commits, 'c01cec')
+        >>> print('006077' in anc)
+        True
     """
     if start_hash not in commits_by_hash:
         return None

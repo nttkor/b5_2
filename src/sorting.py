@@ -17,15 +17,20 @@ from typing import Any, Callable, Sequence, TypeVar
 T = TypeVar("T")
 
 
-def merge_sort(items: Sequence[T], key: Callable[[T], Any]) -> list[T]:
+def merge_sort(
+    items: Sequence[T],
+    key: Callable[[T], Any] | None = None,
+) -> list[T]:
     """Return a new list sorted ascending by key(item). Stable. Does not mutate items.
 
     주어진 시퀀스를 키 추출 함수(key)의 반환값 기준 오름차순으로 안정 정렬(Stable Sort)합니다.
     분할 정복 기법을 통해 리스트를 절반으로 재귀 분할한 뒤 병합합니다.
+    동일한 키를 갖는 원소들은 원래의 상대적 순서가 100% 보존됩니다.
 
     Args:
         items (Sequence[T]): 정렬할 원소들의 시퀀스 (원본은 변경되지 않음).
-        key (Callable[[T], Any]): 각 원소에서 비교 키를 추출하는 콜러블 함수.
+        key (Callable[[T], Any] | None): 각 원소에서 비교 키를 추출하는 콜러블 함수.
+            None으로 주어지면 원소 자체(`lambda x: x`)를 비교 키로 사용합니다.
 
     Returns:
         list[T]: 오름차순으로 안정 정렬된 새로운 리스트.
@@ -33,18 +38,26 @@ def merge_sort(items: Sequence[T], key: Callable[[T], Any]) -> list[T]:
     Complexity:
         - 시간 복잡도: 평균 O(N log N), 최악 O(N log N) (항상 균등 이분할).
         - 공간 복잡도: O(N) (병합 과정에서의 추가 임시 배열 공간).
+
+    Example:
+        >>> merge_sort([38, 27, 43, 3, 9])
+        [3, 9, 27, 38, 43]
+        >>> merge_sort([('b', 2), ('a', 1), ('c', 1)], key=lambda x: x[1])
+        [('a', 1), ('c', 1), ('b', 2)]
     """
+    key_func: Callable[[T], Any] = key if key is not None else (lambda x: x)
+
     # 기저 조건: 원소가 0개 또는 1개이면 이미 정렬된 상태
     if len(items) <= 1:
         return list(items)
 
     # 분할(Divide): 배열의 중간 지점을 계산하여 좌우 분할
     mid: int = len(items) // 2
-    left: list[T] = merge_sort(items[:mid], key)
-    right: list[T] = merge_sort(items[mid:], key)
+    left: list[T] = merge_sort(items[:mid], key_func)
+    right: list[T] = merge_sort(items[mid:], key_func)
 
     # 정복 및 결합(Conquer & Combine): 정렬된 두 부분 배열을 안정적으로 병합
-    return _merge(left, right, key)
+    return _merge(left, right, key_func)
 
 
 def _merge(left: list[T], right: list[T], key: Callable[[T], Any]) -> list[T]:

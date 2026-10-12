@@ -46,9 +46,9 @@ def _run_log(repo: Repository, args: Sequence[str]) -> str:
         if arg.startswith("--sort-by="):
             sort_by = arg.split("=", 1)[1]
         else:
-            return "Invalid args"
+            return "Invalid args: Unknown option. Allowed options: --sort-by=date|author"
     if sort_by not in (None, "date", "author"):
-        return "Invalid args"
+        return f"Invalid args: Invalid sort-by value '{sort_by}'. Allowed options: --sort-by=date|author"
 
     if sort_by is None:
         # 기본 순서: 부모가 자식보다 먼저 나오는 위상 정렬 순서
@@ -76,10 +76,12 @@ def _run_search(repo: Repository, args: Sequence[str]) -> str:
         str: 검색된 커밋 목록 문자열 또는 에러 메시지.
     """
     if len(args) != 1:
-        return "Invalid args"
+        return "Invalid args: Expected exactly 1 argument (<keyword> or --author=<name>)"
     arg = args[0]
     if arg.startswith("--author="):
         hashes = repo.index.search_author(arg.split("=", 1)[1])
+    elif arg.startswith("--"):
+        return f"Invalid args: Unknown search option '{arg}'. Allowed: --author=<name>"
     else:
         hashes = repo.index.search_keyword(arg)
 
@@ -105,6 +107,22 @@ def dispatch(repo: Repository, tokens: Sequence[str]) -> str:
         return ""
     cmd = tokens[0].upper()
     args = tokens[1:]
+
+    # 0. 도움말 안내
+    if cmd in ("HELP", "?"):
+        return (
+            "Available commands:\n"
+            "  INIT <user_name>           - 저장소 초기화 및 기본 브랜치(main) 설정\n"
+            "  BRANCH <branch_name>       - 현재 HEAD 기준 새 브랜치 생성\n"
+            "  SWITCH <branch_name>       - 지정 브랜치로 HEAD 전환\n"
+            "  COMMIT <message>           - 현재 브랜치에 신규 커밋 생성\n"
+            "  LOG [--sort-by=date|author]- 위상 정렬 또는 날짜/작성자별 로그 출력\n"
+            "  PATH <commit1> <commit2>   - 두 커밋 간 무방향 최단 경로 탐색\n"
+            "  ANCESTORS <commit_hash>    - 특정 커밋의 모든 조상 커밋 탐색\n"
+            "  SEARCH <keyword>           - 메시지 키워드 역색인 검색\n"
+            "  SEARCH --author=<name>     - 작성자별 커밋 역색인 검색\n"
+            "  exit / quit                - REPL 쉘 종료"
+        )
 
     # 1. 저장소 초기화
     if cmd == "INIT":
@@ -180,7 +198,8 @@ def main() -> None:
     while True:
         try:
             line = input(PROMPT)
-        except EOFError:
+        except (EOFError, KeyboardInterrupt):
+            print("\nExiting mini-git...")
             break
         line = line.strip()
         if not line:

@@ -149,8 +149,8 @@ def test_error_handling_and_cli_dispatch() -> None:
     assert dispatch(repo, ["COMMIT"]) == "Invalid args"
     assert dispatch(repo, ["PATH", "only_one"]) == "Invalid args"
     assert dispatch(repo, ["ANCESTORS"]) == "Invalid args"
-    assert dispatch(repo, ["SEARCH"]) == "Invalid args"
-    assert dispatch(repo, ["LOG", "--unknown-opt"]) == "Invalid args"
+    assert dispatch(repo, ["SEARCH"]) == "Invalid args: Expected exactly 1 argument (<keyword> or --author=<name>)"
+    assert dispatch(repo, ["LOG", "--unknown-opt"]).startswith("Invalid args")
 
 
 def test_disconnected_path_returns_none() -> None:
@@ -161,8 +161,75 @@ def test_disconnected_path_returns_none() -> None:
     assert shortest_path(commits, "a", "b") is None
 
 
+def test_cycle_detection_in_topological_order() -> None:
+    """DAG 사이클(순환 참조) 주입 시 Kahn 알고리즘의 RepoError 감지를 검증합니다."""
+    # 의도적 사이클 구성: a -> b -> a
+    c1 = Commit("c1", "commit 1", "User", "t1", ["c2"], 0)
+    c2 = Commit("c2", "commit 2", "User", "t2", ["c1"], 1)
+    cyclic_commits = {"c1": c1, "c2": c2}
+
+    try:
+        topological_order(cyclic_commits)
+        assert False, "RepoError expected for cyclic graph"
+    except RepoError as e:
+        assert "Cycle detected" in str(e)
+
+
+def test_deterministic_seed_reproducibility() -> None:
+    """동일한 seed 설정 시 해시 생성의 결정론적 재현성을 검증합니다."""
+    repo1 = Repository(seed=999)
+    repo2 = Repository(seed=999)
+    h1 = repo1._new_hash("test message", "2026-10-12 12:00:00")
+    h2 = repo2._new_hash("test message", "2026-10-12 12:00:00")
+    assert h1 == h2
+
+    # 서로 다른 시드에서는 다른 해시 생성
+    repo3 = Repository(seed=123)
+    h3 = repo3._new_hash("test message", "2026-10-12 12:00:00")
+    assert h1 != h3
+
+
+def test_friendly_error_messages_and_help() -> None:
+    """잘못된 옵션 플래그 입력 시 허용값 안내 및 HELP 명령어 출력을 검증합니다."""
+    repo = Repository()
+    repo.init("Alice")
+
+    # LOG 잘못된 정렬 플래그 가이드
+    log_err = dispatch(repo, ["LOG", "--sort-by=invalid"])
+    assert "Allowed options: --sort-by=date|author" in log_err
+
+    # SEARCH 잘못된 플래그 가이드
+    search_err = dispatch(repo, ["SEARCH", "--invalid=val"])
+    assert "Allowed: --author=<name>" in search_err
+
+    # HELP / ? 명령어
+    help_out = dispatch(repo, ["HELP"])
+    assert "Available commands:" in help_out
+    assert "INIT <user_name>" in help_out
+    question_out = dispatch(repo, ["?"])
+    assert question_out == help_out
+
+
+def test_commit_immutability_and_retry_limit() -> None:
+    """Commit 객체 불변성 방어벽 및 MAX_COLLISION_RETRIES 상수를 검증합니다."""
+    from src.repo import MAX_COLLISION_RETRIES
+
+    assert MAX_COLLISION_RETRIES == 1000
+
+    repo = Repository()
+    repo.init("Alice")
+    c = repo.commit("Initial immutable commit")
+
+    # 객체 불변성 강제 검증: 속성 수정 시도 시 AttributeError 발생
+    try:
+        c.message = "tampered message"
+        assert False, "AttributeError expected for immutable commit modification"
+    except AttributeError as e:
+        assert "Commit objects are immutable" in str(e)
+
+
 if __name__ == "__main__":
-    print("🚀 [Mini Git Test Suite] 단위 및 통합 테스트 시작...")
+    print("🚀 [Mini Git Test Suite] 12개 전수 단위/통합 테스트 시작...")
     test_merge_sort_is_correct_and_stable()
     print("  ✅ 1. 병합 정렬 정렬 정확성 및 안정성 검증 통과")
     r, c1, c2, c3 = test_repo_flow_and_log_order()
@@ -179,4 +246,12 @@ if __name__ == "__main__":
     print("  ✅ 7. CLI 디스패치 및 에러 처리 표준 검증 통과")
     test_disconnected_path_returns_none()
     print("  ✅ 8. 비연결 그래프 No path 검증 통과")
-    print("🎉 All 8 tests passed successfully!")
+    test_cycle_detection_in_topological_order()
+    print("  ✅ 9. 사이클 감지 및 RepoError 방어 검증 통과")
+    test_deterministic_seed_reproducibility()
+    print("  ✅ 10. 고정 시드 결정론적 해시 재현성 검증 통과")
+    test_friendly_error_messages_and_help()
+    print("  ✅ 11. 친절한 에러 가이드 및 HELP 명령어 검증 통과")
+    test_commit_immutability_and_retry_limit()
+    print("  ✅ 12. Commit 불변성 방어벽 및 충돌 상수 검증 통과")
+    print("🎉 All 12 tests passed successfully!")

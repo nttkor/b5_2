@@ -189,29 +189,29 @@ flowchart TD
 
 | 번호 | 점검 항목 및 요구 기준 | 대상 파일 / 영역 | 담당 Phase | 상태 |
 | :---: | :--- | :--- | :---: | :---: |
-| **#1** | INIT 재호출 시 기존 상태 리셋 정책 1줄 명시 | `README.md`, `src/repo.py` | Phase 1, 4 | [ ] 대기 |
-| **#2** | 브랜치 중복 생성 시 예외 발생 정책 1문장 명시 | `README.md`, `src/repo.py` | Phase 1, 4 | [ ] 대기 |
-| **#3** | 위상정렬 타이브레이크(order/hash) 구체적 예시 추가 | `README.md` | Phase 4 | [ ] 대기 |
-| **#4** | 사전순 타이브레이크 선택 근거 인라인 주석 1줄 요약 | `src/graph.py` | Phase 1 | [ ] 대기 |
-| **#5** | ANCESTORS DFS 방문 순서 반환 규칙 1줄 명시 | `README.md` | Phase 4 | [ ] 대기 |
-| **#6** | 잘못된 옵션 플래그 입력 시 허용 옵션 가이드 에러 메시지 출력 | `src/cli.py` | Phase 1 | [ ] 대기 |
-| **#7** | Commit 객체 불변성 보증 주석 및 코드 레벨 방어벽 | `src/repo.py`, `src/commit.py` | Phase 1 | [ ] 대기 |
-| **#8** | MAX_COLLISION_RETRIES = 1000 상수 노출 및 초과 예외 처리 | `src/repo.py` | Phase 1 | [ ] 대기 |
-| **#9** | 토큰화(소문자, 공백 split, 구두점 보존) 정책 docstring 요약 | `src/index.py` | Phase 1 | [ ] 대기 |
-| **#10** | 그래프 전처리(인접 리스트 메모이제이션) 캐싱 전략 주석/기술 | `src/graph.py`, `README.md` | Phase 1, 4 | [ ] 대기 |
-| **#11** | 주요 함수(sorting, graph) docstring에 입출력 예시 추가 | `src/sorting.py`, `src/graph.py` | Phase 1 | [ ] 대기 |
-| **#12** | 사이클 감지 시 RepoError 예외 발생 및 단위 테스트 검증 | `src/graph.py`, `test_mini_git.py` | Phase 1, 2 | [ ] 대기 |
-| **#13** | LOG 전체 그래프 순회 비용 명시 및 증분 정렬 대체 힌트 추가 | `README.md` | Phase 4 | [ ] 대기 |
-| **#14** | PATH용 인접 리스트 재사용 및 Bi-BFS 가능성 기술 | `README.md` | Phase 4 | [ ] 대기 |
-| **#15** | merge_sort key 매개변수 타입/기본값 설명 및 사용 예시 추가 | `src/sorting.py` | Phase 1 | [ ] 대기 |
-| **#16** | 역색인 메모리 비용($O(N \cdot T)$) 숫자 추정 표 추가 | `README.md` | Phase 4 | [ ] 대기 |
-| **#17** | 대규모 확장성 실측 벤치마크 PoC 툴 개발 및 수치 인용 | `utils/poc_scalability.py`, `README.md` | Phase 3, 4 | [ ] 대기 |
-| **#18** | 결정론적 시드 모드 옵션 추가 및 단위 테스트/README 가이드 | `src/repo.py`, `test_mini_git.py`, `README.md` | Phase 1, 2, 4 | [ ] 대기 |
-| **+1** | Commit `__setattr__` 불변성 강제 방어벽 | `src/commit.py` | Phase 1 | [ ] 대기 |
-| **+2** | REPL `KeyboardInterrupt` (Ctrl+C) 정상 종료 방어 | `src/cli.py` | Phase 1 | [ ] 대기 |
-| **+3** | REPL `HELP` / `?` 명령어 가이드 지원 | `src/cli.py` | Phase 1 | [ ] 대기 |
-| **+4** | `utils/README.md`에 PoC 벤치마크 툴 명세 등록 및 영구 자산화 | `utils/README.md` | Phase 3 | [ ] 대기 |
-| **+5** | `READYOU.md` 구술 평가 대본 최신 아키텍처 동기화 | `READYOU.md` | Phase 4 | [ ] 대기 |
+| **#1** | INIT 재호출 시 기존 상태 리셋 정책 1줄 명시 | `README.md`, `src/repo.py` | Phase 1, 4 | **[x] 완료** |
+| **#2** | 브랜치 중복 생성 시 덮어쓰기 정책 1문장 명시 | `README.md`, `src/repo.py` | Phase 1, 4 | **[x] 완료** |
+| **#3** | 위상정렬 타이브레이크(order/hash) 구체적 예시 추가 | `README.md` | Phase 4 | **[x] 완료** |
+| **#4** | 사전순 타이브레이크 선택 근거 인라인 주석 1줄 요약 | `src/graph.py` | Phase 1 | **[x] 완료** |
+| **#5** | ANCESTORS DFS 방문 순서 반환 규칙 1줄 명시 | `README.md` | Phase 4 | **[x] 완료** |
+| **#6** | 잘못된 옵션 플래그 입력 시 허용 옵션 가이드 에러 메시지 출력 | `src/cli.py` | Phase 1 | **[x] 완료** |
+| **#7** | Commit 객체 불변성 보증 주석 및 코드 레벨 방어벽 | `src/repo.py`, `src/commit.py` | Phase 1 | **[x] 완료** |
+| **#8** | MAX_COLLISION_RETRIES = 1000 상수 노출 및 초과 예외 처리 | `src/repo.py` | Phase 1 | **[x] 완료** |
+| **#9** | 토큰화(소문자, 공백 split, 구두점 보존) 정책 docstring 요약 | `src/index.py` | Phase 1 | **[x] 완료** |
+| **#10** | 그래프 전처리(인접 리스트 메모이제이션) 캐싱 전략 주석/기술 | `src/graph.py`, `README.md` | Phase 1, 4 | **[x] 완료** |
+| **#11** | 주요 함수(sorting, graph) docstring에 입출력 예시 추가 | `src/sorting.py`, `src/graph.py` | Phase 1 | **[x] 완료** |
+| **#12** | 사이클 감지 시 RepoError 예외 발생 및 단위 테스트 검증 | `src/graph.py`, `test_mini_git.py` | Phase 1, 2 | **[x] 완료** |
+| **#13** | LOG 전체 그래프 순회 비용 명시 및 증분 정렬 대체 힌트 추가 | `README.md` | Phase 4 | **[x] 완료** |
+| **#14** | PATH용 인접 리스트 재사용 및 Bi-BFS 가능성 기술 | `README.md` | Phase 4 | **[x] 완료** |
+| **#15** | merge_sort key 매개변수 타입/기본값 설명 및 사용 예시 추가 | `src/sorting.py` | Phase 1 | **[x] 완료** |
+| **#16** | 역색인 메모리 비용($O(N \cdot T)$) 숫자 추정 표 추가 | `README.md` | Phase 4 | **[x] 완료** |
+| **#17** | 대규모 확장성 실측 벤치마크 PoC 툴 개발 및 수치 인용 | `utils/poc_scalability.py`, `README.md` | Phase 3, 4 | **[x] 완료** |
+| **#18** | 결정론적 시드 모드 옵션 추가 및 단위 테스트/README 가이드 | `src/repo.py`, `test_mini_git.py`, `README.md` | Phase 1, 2, 4 | **[x] 완료** |
+| **+1** | Commit `__setattr__` 불변성 강제 방어벽 | `src/commit.py` | Phase 1 | **[x] 완료** |
+| **+2** | REPL `KeyboardInterrupt` (Ctrl+C) 정상 종료 방어 | `src/cli.py` | Phase 1 | **[x] 완료** |
+| **+3** | REPL `HELP` / `?` 명령어 가이드 지원 | `src/cli.py` | Phase 1 | **[x] 완료** |
+| **+4** | `utils/README.md`에 PoC 벤치마크 툴 명세 등록 및 영구 자산화 | `utils/README.md` | Phase 3 | **[x] 완료** |
+| **+5** | `READYOU.md` 구술 평가 대본 신규 작성 및 최신 아키텍처 동기화 | `READYOU.md` | Phase 4 | **[x] 완료** |
 
 ---
 
