@@ -9,6 +9,7 @@
 본 문서는 프로젝트 내 주요 가이드 문서 및 소스코드와 유기적으로 연동되어 있습니다:
 
 - 📖 **프로젝트 메인 안내서**: [`README.md`](../README.md)
+- 📊 **사전 평가 보완 계획서**: [`docs/b5_2_pre_eval_plan.md`](../docs/b5_2_pre_eval_plan.md)
 - 🏗️ **아키텍처 및 상세 실행도**: [`study/README.md`](README.md)
 - 📝 **미션 수행 및 요구사항 심층 Q&A**: [`docs/b5_2_mission_QA.md`](../docs/b5_2_mission_QA.md)
 - 🎯 **종합 평가문항 답변서**: [`docs/b5_2_eval_QA.md`](../docs/b5_2_eval_QA.md)

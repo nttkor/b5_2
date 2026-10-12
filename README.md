@@ -1,7 +1,7 @@
 # Mini Git (b5-2) 🚀
 
 > **AI/SW 기초 자료구조와 알고리즘 미션**: 밑바닥부터 직접 구현하는 CLI 기반 Mini Git 커밋 그래프 엔진  
-> **공식 미션 명세서**: [`docs/b5_2_mission.md`](docs/b5_2_mission.md) \| **평가표**: [`docs/b5_2_eval.md`](docs/b5_2_eval.md) \| **기술 백과사전**: [`study/study.md`](study/study.md) \| **종합 가이드**: [`study/README.md`](study/README.md)
+> **공식 미션 명세서**: [`docs/b5_2_mission.md`](docs/b5_2_mission.md) \| **평가표**: [`docs/b5_2_eval.md`](docs/b5_2_eval.md) \| **사전 평가 보완 계획서**: [`docs/b5_2_pre_eval_plan.md`](docs/b5_2_pre_eval_plan.md) \| **기술 백과사전**: [`study/study.md`](study/study.md) \| **종합 가이드**: [`study/README.md`](study/README.md)
 
 ---
 
