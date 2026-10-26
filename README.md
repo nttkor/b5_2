@@ -107,7 +107,7 @@ Mini Git의 모든 커밋 히스토리는 방향성 비순환 그래프(DAG)로 
   - 조상 탐색(DFS) 시 재귀 호출이 멈추지 않아 **Stack Overflow**가 발생하며, 형상 관리 시스템 전체가 붕괴됩니다.
 
 ### 3.2 Kahn 알고리즘 기반 위상 정렬 (`topological_order`)
-
+[jundyu 님의 블로그/Kahn's Algorithm](https://jundyu.tistory.com/34)
 Mini Git의 `LOG` 명령어는 "부모 커밋이 항상 자식 커밋보다 먼저 출력"되어야 합니다. 이를 위해 **Kahn의 진입 차수(in-degree) 위상 정렬 알고리즘**을 사용합니다.
 
 ```mermaid
@@ -176,7 +176,7 @@ graph TD
 | 함수명 | 입력 매개변수 | 반환 타입 | 설명 및 복잡도 |
 | :--- | :--- | :--- | :--- |
 | `topological_order` | `commits: dict[str, Commit]` | `list[str]` | 부모 커밋이 자식 커밋보다 먼저 오는 위상 정렬 해시 목록 반환 (사이클 감지 시 노드 수 포함 예외 발생) ($O(V \log V + V + E)$) |
-| `shortest_path` | `commits, start_hash, end_hash` | `list[str]` | 두 커밋 간 무방향 최단 경로 노드 목록 (사전순 타이브레이크, 없으면 `None`) ($O(V + E)$) |
+| `shortest_path` | `commits, start_hash, end_hash` | `list[str]` | 두 커밋 간 무방향 최단 경로 노드 목록 (사전순 타이브레이크, 없으면 `None`) ($O(V + ßE)$) |
 | `ancestors` | `commits, start_hash` | `set[str]` | 시작 커밋의 모든 조상 커밋 해시 집합 (시작 커밋 제외, CLI에서 `order` 순 정렬 출력) ($O(V + E)$) |
 | `_undirected_adjacency` | `commits: dict[str, Commit]` | `dict[str, list[str]]` | 무방향 양방향 인접 리스트 생성 (읽기 질의 시 캐싱 재사용 권장) ($O(V + E)$) |
 
